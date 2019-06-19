@@ -1,51 +1,100 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import ButtonComponent from '../ButtonComponent';
+import { StyledButton } from '../ButtonComponent';
+import { StyledInput } from '../SearchBarComponent'
+
+const ResultButton = styled(StyledButton)`
+  width: 120px;
+`;
 
 const StyledResult = styled.div`
   width: 80%;
   margin: 0 auto;
   .panel-container {
+    background: #FFFFFF;
+    min-height: 120px;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.05);
     overflow: auto;
+    margin-bottom: 30px;
     ul {
       cursor: pointer;
       padding: 0;
       margin: 0;
       display: table;
-      background-color: $white;
+      background-color: #FFFFFF;
     }
     .panel-list {
-      border-top: 1px solid $grey-mid;
+      border-top: 1px solid #E5E5E5;
     }
     .panel-list-bottom {
-      border-bottom: 1px solid $grey-mid;
+      border-bottom: 1px solid #E5E5E5;
     }
     li {
       text-align: left;
-      padding: 10px;
       display: table-cell;
       vertical-align: middle;
       .grey-light-bg {
         color: $black-jf;
       }
     }
-    .panel-list {
+    .result-panel-list {
       vertical-align: middle;
       font-size: 14px;
       overflow: auto;
+      width: 100%;
       &.header-font {
         font-size: 12px;
         color: $grey-dark;
       }
-    }
-    .result-header {
-      height: 100px;
-      .winner {
-        background: red;
+      li {
+        &:first-child {
+          width: 40%;
+        }
+        &:nth-of-type(2) {
+          width: 20%;
+          border-left: 1px solid #E5E5E5;
+          text-align: center;
+        }
+        &:nth-of-type(3) {
+          width: 20%;
+          border-left: 1px solid #E5E5E5;
+          text-align: center;
+        }
+        &:nth-of-type(4) {
+          width: 20%;
+          border-left: 1px solid #E5E5E5;
+          text-align: center;
+        }
       }
     }
+    .result-header {
+      li {
+        &:first-child {
+          padding: 0 10px 5px 10px;
+          height: 100%;
+        }
+        
+      }
+      height: 100px;
+      .winner {
+        background: #66f791;
+      }
+    }
+    .venue-name {
+      display: block;
+    }
+    .venue-description {
+      display: block;
+      font-size: 11px;
+    }
   }
+`;
+
+const NameInput = styled(StyledInput)`
+  width: 80%;
 `;
 
 class SearchResultComponent extends Component {
@@ -101,23 +150,30 @@ class SearchResultComponent extends Component {
     return (
       <StyledResult>
         <div className="panel-container">
-          <ul className="panel-list result-header">
+          <ul className="result-panel-list result-header panel-list-bottom">
             <li>Participants</li>
-            { this.props.results.map((venue) => {
+            { this.props.results.map((venue, venueIndex) => {
               const vote = this.votes[venue.name]
               const className = vote > 0 && vote === this.maxVote ? "winner" : ""
               return (
-                <li className={className}>{venue.name}</li>
+                <li className={className} key={`venue-${venueIndex}`}>
+                  <span className="venue-name">{venue.name}</span>
+                  <span className="venue-description">{venue.description}</span>
+                </li>
               )
             })}
           </ul>
           { this.state.participants.map((user, userIndex) => {
             return (
-              <ul className="panel-list">
-                <li><input onChange={this.updateParticipant('name', userIndex)} placeholder="Type here"/></li>
+              <ul
+                className="result-panel-list panel-list-bottom"
+                key={`user-${userIndex}`}>
+                <li>
+                  <NameInput onChange={this.updateParticipant('name', userIndex)} placeholder="Type here"/>
+                </li>
                 { this.props.results.map((venue, venueIndex) => {
                   return (
-                    <li>
+                    <li key={`user-venue-${userIndex}${venueIndex}`}>
                       {user.name && <input
                         type="radio"
                         name={`${user.name}-${userIndex}`}
@@ -132,7 +188,7 @@ class SearchResultComponent extends Component {
           })}
         </div>
 
-        <ButtonComponent text="Add Participant" onClickHandler={this.addParticipants}/>
+        <ResultButton onClick={this.addParticipants}>Add Participant</ResultButton>
       </StyledResult>
     )
   }

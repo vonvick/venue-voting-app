@@ -1,26 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledButton = styled.button`
-  border-radius: 4px;
+export const StyledButton = styled.button`
   background-color: #524CAF;
+  border-radius: 3px;
   color: #FFFFFF;
   padding: 10px;
   width: 100px;
   &:hover {
     opacity: 0.75;
   }
+  cursor: pointer;
 `
 
 const ButtonComponent = ({onClickHandler, className, text}) => {
   return (
-    <div className="button-div">
-      <StyledButton
-        className={className}
-        onClick={onClickHandler}>
-        {text} 
-      </StyledButton>
-    </div>
+    <StyledButton
+      className={className}
+      onClick={onClickHandler}>
+      {text} 
+    </StyledButton>
   )
 };
 
