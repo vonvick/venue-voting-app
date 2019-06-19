@@ -91,6 +91,29 @@ const StyledResult = styled.div`
       font-size: 11px;
     }
   }
+  .venue-option {
+    display: block;
+    width: 100%;
+    height: 40px;
+  }
+  .venue-option > input {
+    visibility: hidden;
+    position: absolute;
+  }
+  .venue-option > input + div {
+    cursor: pointer;
+  }
+  .venue-option > input:checked + div{
+    background: #C7EA46;
+    color: #FFFFFF;
+    font-size: 16px;
+    height: 100%;
+  }
+  .selected-venue {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const NameInput = styled(StyledInput)`
@@ -101,7 +124,12 @@ class SearchResultComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      participants: [],
+      participants: [
+        {
+          name: '',
+          selected: null
+        }
+      ],
     }
   }
 
@@ -172,14 +200,20 @@ class SearchResultComponent extends Component {
                   <NameInput onChange={this.updateParticipant('name', userIndex)} placeholder="Type here"/>
                 </li>
                 { this.props.results.map((venue, venueIndex) => {
+                  const selectedClass = user.selected == venueIndex ? 'selected-venue' : '';
                   return (
                     <li key={`user-venue-${userIndex}${venueIndex}`}>
-                      {user.name && <input
-                        type="radio"
-                        name={`${user.name}-${userIndex}`}
-                        value={venueIndex}
-                        checked={user.selected == venueIndex}
-                        onChange={this.updateParticipant('selected', userIndex)}/>}
+                      <label className="venue-option">
+                        {user.name &&
+                          <input
+                            type="radio"
+                            name={`${user.name}-${userIndex}`}
+                            value={venueIndex}
+                            checked={user.selected == venueIndex}
+                            onChange={this.updateParticipant('selected', userIndex)}/>
+                        }
+                        { selectedClass && <div className={selectedClass}>&#10003;</div> }
+                      </label>
                     </li>
                   )
                 })}
@@ -188,7 +222,7 @@ class SearchResultComponent extends Component {
           })}
         </div>
 
-        <ResultButton onClick={this.addParticipants}>Add Participant</ResultButton>
+        <ResultButton onClick={this.addParticipants} disabled={this.props.results.length < 1}>Add Participant</ResultButton>
       </StyledResult>
     )
   }
