@@ -114,6 +114,9 @@ const StyledResult = styled.div`
     align-items: center;
     justify-content: center;
   }
+  .rating-score {
+    font-weight: bold;
+  }
 `;
 
 const NameInput = styled(StyledInput)`
@@ -185,8 +188,9 @@ class SearchResultComponent extends Component {
               const className = vote > 0 && vote === this.maxVote ? "winner" : ""
               return (
                 <li className={className} key={`venue-${venueIndex}`}>
-                  <span className="venue-name">{venue.name}</span>
+                  <a href={venue.canonicalUrl} target="_blank" rel="noopener"><span className="venue-name">{venue.name}</span></a>
                   <span className="venue-description">{venue.description}</span>
+                  <span className="venue-name rating-score">{venue.rating}</span>
                 </li>
               )
             })}

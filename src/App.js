@@ -26,7 +26,8 @@ const App = () => {
 
   const searchVenue = async (searchText) => {
     try {
-      setResults(await fetchRecommendedPlaces(searchText))
+      const result = await fetchRecommendedPlaces(searchText);
+      setResults(result);
       setError(false);
     } catch (error) {
       setError(true);
