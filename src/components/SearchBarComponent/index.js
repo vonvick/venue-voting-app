@@ -15,6 +15,7 @@ const StyledInputContainer = styled.div`
   flex-direction: column;
   .input-container {
     width: 80%;
+    display: flex;
     margin: 0 auto;
   }
 `;
@@ -24,12 +25,18 @@ export const StyledInput = styled.input`
   margin: 0.5rem;
   border: 1px solid #E5E5E5;
   border-radius: 4px;
-  display: block;
+  display: table-cell;
   width: 100%;
 `;
 
 const InputComponent = ({ performSearch }) => {
   const [searchText, setSearchText] = useState('');
+
+  const trackEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      performSearch(searchText);
+    }
+  };
 
   return (
     <StyledInputContainer>
@@ -37,6 +44,7 @@ const InputComponent = ({ performSearch }) => {
         <StyledInput
           value={searchText}
           type="text"
+          onKeyPress={trackEnterKey}
           onChange={(e) => setSearchText(e.target.value)}/>
       </div>
       <ButtonComponent className="button-item" onClickHandler={() => { performSearch(searchText) }} text="search"/>
