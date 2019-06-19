@@ -12,7 +12,7 @@ const StyledNavigation = styled.nav`
   display: flex;
 ` 
 
-const HorizontalNavigation = (className, ) => (
+const HorizontalNavigation = () => (
   <StyledNavigation>
     <div className="logo-container">
       <h4>VENUE VOTING APP</h4>
