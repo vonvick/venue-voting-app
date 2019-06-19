@@ -10,18 +10,16 @@ const StyledInput = styled.input`
   border-radius: 4px;
 `;
 
-const InputComponent = () => {
+const InputComponent = ({ performSearch }) => {
   const [searchText, setSearchText] = useState('');
 
-  const searchVenue = () => {
-    console.log(searchText)
-  };
   return (
     <div>
       <StyledInput
         value={searchText}
-        onChange={() => setSearchText(searchText)}/>
-      <ButtonComponent onClickHandler={searchVenue} text="search"/>
+        type="text"
+        onChange={(e) => setSearchText(e.target.value)}/>
+      <ButtonComponent onClickHandler={() => { performSearch(searchText) }} text="search"/>
     </div>
   );
 };
