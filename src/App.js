@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -7,6 +7,7 @@ import fetchRecommendedPlaces from './utils/fetchRecommendedPlaces';
 import SearchBarComponent from './components/SearchBarComponent';
 import SearchResultComponent from './components/SearchResultComponent';
 import HorizontalNavigation from './components/HorizontalNavigation';
+import ErrorComponent from './components/ErrorComponent';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -20,10 +21,16 @@ const AppContainer = styled.div`
 `;
 
 const App = () => {
-  const [results, setResults] = React.useState([])
+  const [results, setResults] = useState([])
+  const [error, setError] = useState(false)
 
   const searchVenue = async (searchText) => {
-    setResults(await fetchRecommendedPlaces(searchText))
+    try {
+      setResults(await fetchRecommendedPlaces(searchText))
+      setError(false);
+    } catch (error) {
+      setError(true);
+    }
   };
 
   return (
@@ -33,9 +40,14 @@ const App = () => {
         <SearchBarComponent performSearch={searchVenue}/>
       </div>
 
-      <div className="result-container">
-        <SearchResultComponent results={results}/>
-      </div>
+      { !error && <div className="result-container">
+          <SearchResultComponent results={results}/>
+        </div>
+      }
+      { error && <div className="">
+          <ErrorComponent />
+        </div>
+      }
     </AppContainer>
   );
 }
